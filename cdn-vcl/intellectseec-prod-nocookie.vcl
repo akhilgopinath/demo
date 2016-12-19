@@ -65,6 +65,16 @@ sub vcl_recv {
       unset req.http.cookie;
     }
   }
+}
+sub vcl_fetch {
+  if ( (!(req.url ~ "(wp-(login|admin)|login)")) || (req.request == "GET") ) {
+    unset beresp.http.set-cookie;
+    set beresp.ttl = 1h;
+  }
+
+  if (req.url ~ "\.(gif|jpg|jpeg|swf|css|js|flv|mp3|mp4|pdf|ico|png)(\?.*|)$") {
+    set beresp.ttl = 365d;
+  }
 }     
   
   
