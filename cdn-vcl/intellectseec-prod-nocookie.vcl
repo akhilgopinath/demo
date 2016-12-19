@@ -81,8 +81,7 @@ sub vcl_fetch {
 
     
     
-#--FASTLY FETCH END
-
+#--FASTLY SUB UNIT ENDS
 
 
   if ((beresp.status == 500 || beresp.status == 503) && req.restarts < 1 && (req.request == "GET" || req.request == "HEAD")) {
