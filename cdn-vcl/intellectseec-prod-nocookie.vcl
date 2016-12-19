@@ -81,7 +81,6 @@ sub vcl_fetch {
 #--FASTLY UIDIDUIDUIUD
 
 
-
     if (req.request != "HEAD" && req.request != "GET" && req.request != "FASTLYPURGE") {
       return(pass);
     }
