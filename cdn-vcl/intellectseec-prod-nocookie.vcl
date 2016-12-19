@@ -37,7 +37,35 @@ sub vcl_recv {
     # end default conditions
 
   
-      
+ sub vcl_recv {
+  if (req.request == "PURGE") {
+    if (!client.ip ~ purge) {
+      error 405 "Not allowed.";
+    }
+    return (lookup);
+  }
+ 
+  if (req.url ~ "\.(gif|jpg|jpeg|swf|css|js|flv|mp3|mp4|pdf|ico|png)(\?.*|)$") {
+    unset req.http.cookie;
+    set req.url = regsub(req.url, "\?.*$", "");
+  }
+
+  if (req.url ~ "\?(utm_(campaign|medium|source|term)|adParams|client|cx|eid|fbid|feed|ref(id|src)?|v(er|iew))=") {
+    set req.url = regsub(req.url, “\?.*$”, “”);
+  }
+
+  if (req.url ~ "wp-(login|admin)" || req.url ~ "preview=true" || req.url ~ "xmlrpc.php") {
+    return (pass);
+  }
+
+  if (req.http.cookie) {
+    if (req.http.cookie ~ "(wordpress_|wp-settings-)") {
+      return(pass);
+    } else {
+      unset req.http.cookie;
+    }
+  }
+}     
   
   
 #--FASTLY RECV END
