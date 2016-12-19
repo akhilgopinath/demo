@@ -20,12 +20,6 @@ backend F_addr_52_206_171_122 {
 
 
 
-
-
-
-
-
-
 sub vcl_recv {
 #--FASTLY RECV BEGIN
   if (req.restarts == 0) {
